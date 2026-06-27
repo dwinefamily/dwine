@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Absensi Karyawan</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f6f9;
+    margin:20px;
+}
+
+h2{
+    text-align:center;
+    color:#333;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:#fff;
+}
+
+th,td{
+    border:1px solid #ddd;
+    padding:10px;
+    text-align:center;
+}
+
+th{
+    background:#007bff;
+    color:white;
+}
+
+button{
+    padding:8px 12px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.btn-absen{
+    background:#28a745;
+    color:white;
+}
+
+.btn-absen:hover{
+    background:#218838;
+}
+
+.btn-rekap{
+    background:#007bff;
+    color:white;
+    margin-top:15px;
+}
+
+.btn-rekap:hover{
+    background:#0056b3;
+}
+
+#hasil{
+    margin-top:20px;
+    background:white;
+    padding:15px;
+    border-radius:5px;
+}
+</style>
+</head>
+<body>
+
+<h2>ABSENSI KARYAWAN</h2>
+
+<p>
+    <strong>Tanggal :</strong>
+    <input type="date" id="tanggal">
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>Nama Karyawan</th>
+            <th>Status</th>
+            <th>Jam Absen</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody id="tabelAbsensi"></tbody>
+</table>
+
+<button class="btn-rekap" onclick="simpanAbsensi()">
+    Tampilkan Rekap
+</button>
+
+<div id="hasil"></div>
+
+<script>
+const karyawan = [
+    "Pak Alkan",
+    "Pak Amron",
+    "Pak Tain",
+    "Sinta",
+    "Mega",
+    "Siti",
+    "Ana",
+    "Nur",
+    "Diana",
+    "Lina",
+    "Bu Marni"
+];
+
+const tbody = document.getElementById("tabelAbsensi");
+
+karyawan.forEach((nama, index) => {
+    tbody.innerHTML += `
+    <tr>
+        <td>${index + 1}</td>
+        <td>${nama}</td>
+        <td>
+            <select id="status${index}">
+                <option value="Hadir">Hadir</option>
+                <option value="Izin">Izin</option>
+                <option value="Sakit">Sakit</option>
+                <option value="Alpha">Alpha</option>
+            </select>
+        </td>
+        <td id="jam${index}">-</td>
+        <td>
+            <button class="btn-absen" onclick="absen(${index})">
+                Absen
+            </button>
+        </td>
+    </tr>
+    `;
+});
+
+function absen(index){
+    const sekarang = new Date();
+    const jam = sekarang.toLocaleTimeString('id-ID');
+
+    document.getElementById(`jam${index}`).innerText = jam;
+}
+
+function simpanAbsensi(){
+    const tanggal = document.getElementById("tanggal").value;
+
+    let hasil = `
+    <h3>Rekap Absensi</h3>
+    <p><strong>Tanggal:</strong> ${tanggal}</p>
+    <table style="width:100%; border-collapse:collapse;">
+        <tr>
+            <th style="border:1px solid #ddd;padding:8px;">Nama</th>
+            <th style="border:1px solid #ddd;padding:8px;">Status</th>
+            <th style="border:1px solid #ddd;padding:8px;">Jam Absen</th>
+        </tr>
+    `;
+
+    karyawan.forEach((nama,index)=>{
+        const status = document.getElementById(`status${index}`).value;
+        const jam = document.getElementById(`jam${index}`).innerText;
+
+        hasil += `
+        <tr>
+            <td style="border:1px solid #ddd;padding:8px;">${nama}</td>
+            <td style="border:1px solid #ddd;padding:8px;">${status}</td>
+            <td style="border:1px solid #ddd;padding:8px;">${jam}</td>
+        </tr>
+        `;
+    });
+
+    hasil += "</table>";
+
+    document.getElementById("hasil").innerHTML = hasil;
+}
+
+document.getElementById("tanggal").valueAsDate = new Date();
+</script>
+
+</body>
+</html>
